@@ -13,7 +13,7 @@ module Docx
       end
 
       def url
-        @relationships.xpath("//*[@Id='#{id}']").attributes["Target"].value
+        @relationships.xpath("//*[@Id='#{id}']").find{|n| n.attributes.has_key?("Target")}.attributes["Target"].value
       end
 
       def initialize(node, relationships)
