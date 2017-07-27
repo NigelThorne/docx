@@ -19,7 +19,7 @@ module Docx
   #   end
   class Document
     attr_reader :xml, :doc, :zip, :styles
-    
+
     def initialize(path, &block)
       @replace = {}
       @zip = Zip::File.open(path)
@@ -27,6 +27,8 @@ module Docx
       @doc = Nokogiri::XML(@document_xml)
       @styles_xml = @zip.read('word/styles.xml')
       @styles = Nokogiri::XML(@styles_xml)
+      @relationships_xml = @zip.read('word/_rels/document.xml.rels')
+      @relationships = Nokogiri::XML(@relationships_xml)
       if block_given?
         yield self
         @zip.close
@@ -72,6 +74,10 @@ module Docx
     def font_size
       size_tag = @styles.xpath('//w:docDefaults//w:rPrDefault//w:rPr//w:sz').first
       size_tag ? size_tag.attributes['val'].value.to_i / 2 : nil
+    end
+
+    def relationships(id)
+      @relationships.xpath("//*[@Id='#{id}'']")
     end
 
     ##
