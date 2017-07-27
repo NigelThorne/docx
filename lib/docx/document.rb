@@ -76,6 +76,10 @@ module Docx
       size_tag ? size_tag.attributes['val'].value.to_i / 2 : nil
     end
 
+    def links
+      @doc.xpath("//w:hyperlink").map { |t_node| parse_link_from t_node };
+    end
+
     def relationships_to(id)
       @relationships.xpath("//*[@Id='#{id}']")
     end
@@ -149,6 +153,10 @@ module Docx
 
     def parse_table_from(t_node)
       Elements::Containers::Table.new(t_node)
+    end
+
+    def parse_link_from(t_node)
+      Elements::Link.new(t_node, @relationships)
     end
   end
 end
