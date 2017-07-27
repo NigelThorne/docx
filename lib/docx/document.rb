@@ -76,8 +76,8 @@ module Docx
       size_tag ? size_tag.attributes['val'].value.to_i / 2 : nil
     end
 
-    def relationships(id)
-      @relationships.xpath("//*[@Id='#{id}'']")
+    def relationships_to(id)
+      @relationships.xpath("//*[@Id='#{id}']")
     end
 
     ##
